@@ -1,0 +1,6 @@
+Template: apache2-web-conf/remote_ips
+Type: string
+default:
+Description: List of remote IP addresses that requier 'dev.' access:
+ Please provide a space seperated list of additional IP addresses that you would wish to
+ gain remote access. Be aware that this information can be provided, extended and or edited later.

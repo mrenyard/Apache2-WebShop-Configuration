@@ -1,0 +1,7 @@
+#!/bin/bash -eu
+
+sudo service apache2 start
+sudo service mysql start
+sudo service postfix start
+
+exit 0;

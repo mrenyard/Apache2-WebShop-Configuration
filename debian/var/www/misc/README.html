@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <title>WebShop Pro (Beta v0.1) Feature List</title>
+    <style>
+      body { width: 90%; max-width: 40em; margin: 2em auto; color: #667; text-shadow: .2em .2em .2em rgba(0,0,0,.1); }
+      sup { font-size: .4em; }
+
+      a { color: rgb(36, 109, 56); text-decoration:none; }
+      a:hover { color: rgb(96, 73, 141) ; text-shadow: 2px 2px 2px rgba(36, 109, 56, 0.5); }
+    </style>
+  </head>
+  <body>
+    <div role="main">
+      <hgroup>
+        <h1>
+          WebShop<sup><abbr title="Trade Mark">TM</abbr></sup>&nbsp;Pro (Beta&nbsp;v0.1)
+        </h1>
+        <h2>Feature List</h2>
+      </hgroup>
+      <ol>
+        <li>
+          <h2>
+            Maximised Concurent Server&nbsp;Connections
+          </h2>
+          <p>
+            All browsers set a maximun concurent connections limit (at varying levels),
+            following <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html#sec8.1.4"
+            >Section&nbsp;8.1.4 of the HTTP/1.1&nbsp;RFC</a>. By <q cite=
+            "http://www.stevesouders.com/blog/2008/03/20/roundup-on-parallel-connections/#more-9"
+            >using multiple domain names, such as [style].mydomain.com, [func].mydomain.com,
+            [media].mydomain.com, etc., &hellip;[it]&hellip; allows &hellip;[us]&hellip; to
+            achieve a multiple of the per server connection limit.</q> (<a href=
+            "http://www.stevesouders.com/">Steve&nbsp;Souders</a>).
+          </p>
+          <p>
+            This also alows us to optimize each sub-domain for its particular job and is used
+            extensivaly in many of the subsaquantly mentiond&nbsp;features.
+          </p>
+        </li>
+        <li>
+          <h2>
+            Development&nbsp;Mode Switching
+          </h2>
+          <p>
+            By using a <em>dev.</em> sub-domain we can switch between differant views of
+            the same live website, automaticaly toggaling between debuging features and
+            optimized performance. Working in this way also enables us to layer improvments
+            onto the live site without interfering with its current state until each
+            change&nbsp;is&nbsp;vetted.
+          </p>
+          <ol>
+            <li>
+              <h3>Scratch List</h3>
+              <p>
+                The Scratch List file (<em>list.scratch</em>) is provided as the
+                place to list all current Scratch Template and Scratch CSS files and is
+                the default root view when in Development Mode. This gives one easy
+                stating point from which developers can record, and clients view,
+                evolving ideas for the sites development.
+              </p>
+            </li>
+            <li>
+              <h3>Scratch Template Files</h3>
+              <p>
+                Scratch Template Files (files with a <em>.scratch</em> extension)
+                provid an effective method for testing new markup alone side all the
+                other website paraphenalia (i.e. its style and function), whilst being
+                inacccesible through the live site.
+              </p>
+            </li>
+            <li>
+              <h3>Needs Rebuild Warning Notification</h3>
+              <p>
+                If changes have been made that effect the live site without building
+              </p>
+            </li>
+            <li>&hellip;</li>
+          </ol>
+        </li>
+        <li>
+          <h2>Cascading Style Sheet Server (CSS-S)</h2>
+          <p>
+            Lorem ipsum dolor sit amet, emphasis consectetuer adipiscing elit. Nullam dignissim
+            convallis est. Quisque aliquam. Donec faucibus. Nunc iaculis suscipit dui. Nam sit
+            amet sem. Aliquam libero nisi, imperdiet at, tincidunt nec, gravida vehicula, nisl.
+          </p>
+          <ol>
+            <li>
+              <a href=
+              "http://www.nczonline.net/blog/2010/07/06/data-uris-make-css-sprites-obsolete/"
+              >Data URIs making CSS sprites obsolete</a>, using <a href=
+              "https://github.com/nzakas/cssembed">CSSEmbed</a>.
+            </li>
+            <li>
+              Losslessly optimization of PNG and JPG files prior to embedding Data URIs.
+              Using <a href="http://trimage.org/">Trimage</a>.
+            </li>
+            <li>&hellip;</li>
+          </ol>
+        </li>
+        <li>
+          <h2>JavaScript Server (JS-S)</h2>
+          <p>
+            Lorem ipsum dolor sit amet, emphasis consectetuer adipiscing elit. Nullam dignissim
+            convallis est. Quisque aliquam. Donec faucibus. Nunc iaculis suscipit dui. Nam sit
+            amet sem. Aliquam libero nisi, imperdiet at, tincidunt nec, gravida vehicula, nisl.
+          </p>
+          <ol>
+            <li>&hellip;</li>
+          </ol>
+        </li>
+        <li>
+          <h2>Media Server</h2>
+          <p>
+            Lorem ipsum dolor sit amet, emphasis consectetuer adipiscing elit. Nullam dignissim
+            convallis est. Quisque aliquam. Donec faucibus. Nunc iaculis suscipit dui. Nam sit
+            amet sem. Aliquam libero nisi, imperdiet at, tincidunt nec, gravida vehicula, nisl.
+          </p>
+          <ol>
+            <li>
+              <h2>Content Negosiation (favouring SGV)?&hellip;</h2>
+              <p>Lorem ipsum&hellip;</p>
+            </li>
+            <li>
+              Losslessly optimization of PNG and JPG files. Using <a href="http://trimage.org/"
+              >Trimage</a>.
+            </li>
+            <li>&hellip;</li>
+          </ol>
+        </li>
+        <li>
+          <h2>Live Server Performance?&hellip;</h2>
+          <ol>
+            <li>Automatically passes YSlow (minus&nbsp;CND)</li>
+            <li>Automatic versioning of css, javascript and&nbsp;media&nbsp;files</li>
+          </ol>
+        </li>
+      </ol>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+sudo a2disconf webshop.local
+
+if [ -d /etc/apache2/ ]; then
+  if [ -f /etc/apache2/sites-available_000-default.conf.dpkg-old ]; then
+    sudo mv /etc/apache2/sites-available_000-default.conf.dpkg-old /etc/apache2/sites-available/000-default.conf;
+  fi
+  if [ -f /etc/apache2/envvars.dpkg-old ]; then
+    sudo mv /etc/apache2/envvars.dpkg-old /etc/apache2/envvars;
+  fi
+  if [ -f /etc/apache2/conf-available_security.conf.dpkg-old ]; then
+    sudo mv /etc/apache2/conf-available_security.conf.dpkg-old /etc/apache2/conf-available/security.conf;
+  fi
+  for f in /etc/php/*/apache2/php.ini.dpkg-old; do
+    sudo mv "$f" "${f%/apache2/php.ini.dpkg-old}/apache2/php.ini"
+  done
+  for f in /etc/php/*/cli/php.ini.dpkg-old; do
+    sudo mv "$f" "${f%/cli/php.ini.dpkg-old}/cli/php.ini"
+  done
+fi
+exit 0;
