@@ -13,10 +13,10 @@ if [ -d /etc/apache2/ ]; then
     sudo mv /etc/apache2/conf-available_security.conf.dpkg-old /etc/apache2/conf-available/security.conf;
   fi
   for f in /etc/php/*/apache2/php.ini.dpkg-old; do
-    sudo mv "$f" "${f%/apache2/php.ini.dpkg-old}/apache2/php.ini"
+    sudo mv "$f" `sed 's/php.ini.dpkg-old/php.ini/g' <<<"$f"`
   done
   for f in /etc/php/*/cli/php.ini.dpkg-old; do
-    sudo mv "$f" "${f%/cli/php.ini.dpkg-old}/cli/php.ini"
+    sudo mv "$f" `sed 's/php.ini.dpkg-old/php.ini/g' <<<"$f"`
   done
 fi
 exit 0;

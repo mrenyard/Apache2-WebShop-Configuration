@@ -4,6 +4,10 @@
 db_version 2.0
 db_capb backup
 
+db_input high apache2-web-conf/domain_name || true
+db_title "Primary domain name for this server:"
+db_go || true
+
 db_input high apache2-web-conf/remote_ips || true
-db_title "List of remote IP addresses that requier 'dev.' access:"
+db_title "List of any remote IP addresses that requier 'dev.' access:"
 db_go || true

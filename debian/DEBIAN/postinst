@@ -4,24 +4,30 @@
 db_get apache2-web-conf/remote_ips
 REMOTE_IPS="$RET";
 
+db_get apache2-web-conf/domain_name
+DOMAIN_NAME="$RET";
+if [ -z "$DOMAIN_NAME" ]; then DOMAIN_NAME="${HOSTNAME}.lan"; fi
+
 echo "UPDATING /etc/apache2/sites-available/default";
 if [ -f /etc/apache2/sites-available/000-default.conf ]; then
   sudo mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available_000-default.conf.dpkg-old;
 fi
 sudo cp /tmp/apache2-webshop-conf/etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
+sudo sed -i -e 's/DOMAIN_NAME/'${DOMAIN_NAME}'/g' /etc/apache2/sites-available/000-default.conf
 
-echo "CONFIGURING APACHE2 ENVVARS";
+#echo "CONFIGURING APACHE2 ENVVARS";
 if [ -f /etc/apache2/envvars ]; then
   sudo cp /etc/apache2/envvars /etc/apache2/envvars.dpkg-old;
 fi
-sudo echo "export HOSTNAME=\"${HOSTNAME}\"" >> /etc/apache2/envvars;
+sudo echo "export HOSTNAME=\"${DOMAIN_NAME}\"" >> /etc/apache2/envvars;
 
 echo "CONFIGURING symlink for ChromePhp";
 sudo ln -s /usr/share/php/ChromePhp.php /usr/share/php/ChromePhp.class.php;
 
 echo "ADDING APACHE MODULES";
-sudo a2enmod vhost_alias rewrite headers deflate setenvif filter expires include mpm_prefork ssl php*;
 sudo a2dismod mpm_event mpm_worker;
+sudo a2enmod vhost_alias rewrite headers deflate setenvif filter expires include mpm_prefork ssl php*;
+
 
 echo "SETTING 'ServerTokens' to 'Prod' IN '/etc/apache2/conf-available/security'";
 sudo mv /etc/apache2/conf-available/security.conf /etc/apache2/conf-available_security.conf.dpkg-old;
@@ -30,13 +36,13 @@ sudo awk '{sub("^ServerTokens [A-Z|a-z]+", "ServerTokens Prod");print}' /etc/apa
 echo "SETTING 'expose_php = Off' AND 'date.timezone = Europe/London' IN '/etc/php/*/apache2/php.ini'";
 for f in /etc/php/*/apache2/php.ini; do
   sudo mv "$f" "${f%}.dpkg-old"
-  sudo awk '{sub("^expose_php = O(n|ff)", "expose_php = Off");sub("^(;)date.timezone =*", "date.timezone = Europe/London");print}' /etc/php/${f%}/apache2/php.ini.dpkg-old > /etc/php/${f%}/apache2/php.ini;
+  sudo awk '{sub("^expose_php = O(n|ff)", "expose_php = Off");sub("^(;)date.timezone =*", "date.timezone = Europe/London");print}' ${f%}.dpkg-old > ${f%};
 done
 
 echo "SETTING 'date.timezone = Europe/London' IN '/etc/php/*/cli/php.ini'";
 for f in /etc/php/*/cli/php.ini; do
   sudo mv "$f" "${f%}.dpkg-old"
-  sudo awk '{sub("^(;)date.timezone =*", "date.timezone = Europe/London");print}' /etc/php/${f%}/cli/php.ini.dpkg-old > /etc/php/${f%}/cli/php.ini;
+  sudo awk '{sub("^(;)date.timezone =*", "date.timezone = Europe/London");print}' ${f%}.dpkg-old > ${f%};
 done
 
 echo 'CONFIGURING access for the following IP addresses:';
@@ -45,10 +51,21 @@ for IP in ${REMOTE_IPS}; do
   sed -e "s/# Allowed remote access IP addresses/# Allowed remote access IP addresses\n  Require ip $IP/g" /etc/apache2/conf-available/webshop.local.conf > /etc/apache2/conf-available/webshop.local.conf.tmp && mv /etc/apache2/conf-available/webshop.local.conf.tmp /etc/apache2/conf-available/webshop.local.conf
 done;
 
-echo "MODIFIYING Firewall (ufw) for HTTP/S" 
-sudo ufw allow 'Apache Full';
+echo "APPLYING APACHE2 CONFIGURATION CHANGES";
 sudo a2enconf webshop.local;
+
+
+if [ -d /etc/apache2/ssl ]; then sudo rm -rf /etc/apache2/ssl; fi
+sudo mkdir /etc/apache2/ssl
 
 echo "RESTARTING MODIFIED SERVICES";
 sudo webstart;
+
+#TODO:mrenyard: Find way to pre populate detail ? with debconf
+echo "to CREATE SELF-SIGNED SSL CERTIFICATE PLEASE DO THE FOLLOWING:";
+echo "sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl/apache.key -out /etc/apache2/ssl/apache.crt"
+echo "sudo chown root:ssl-cert /etc/apache2/ssl/*"
+echo "sudo chmod 710 /etc/apache2/ssl/*"
+echo "sudo webstart"
+
 exit 0;

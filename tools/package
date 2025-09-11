@@ -26,7 +26,7 @@ case ${PROCESS_TYPE} in
       if [ ! $(getent group developer) ]; then sudo addgroup developer; fi
       sudo chown -R root:root ../debian/etc;
       sudo chown -R root:root ../debian/usr;
-      sudo chown -R www-data:www-data ../debian/var/www/;
+      sudo chown -R root:www-data ../debian/var/www/;
       sudo dpkg-deb --build ../debian;
       echo "renaming '../debian.deb' to '${SAVE_AS}'"
       mv ../debian.deb ${SAVE_AS};

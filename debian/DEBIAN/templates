@@ -1,6 +1,13 @@
+Template: apache2-web-conf/domain_name
+Type: string
+default:  ${HOSTNAME}.lan
+Description: Primary domain name for this server:
+ Please provide the domain name of this server. This will be used to configure the apache virtual hosts
+ and SSL certificates. Be aware that this information can be provided, extended and or edited later. 
+
 Template: apache2-web-conf/remote_ips
 Type: string
 default:
-Description: List of remote IP addresses that requier 'dev.' access:
+Description: List of any remote IP addresses that requier 'dev.' access:
  Please provide a space seperated list of additional IP addresses that you would wish to
  gain remote access. Be aware that this information can be provided, extended and or edited later.
