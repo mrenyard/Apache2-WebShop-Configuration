@@ -1,14 +1,13 @@
-Apache2 WebShop Configuration
-=============================
-Apache2 WebShop Configuration. Optimized webserver setup.
+Apache2 WebShop Configuration (Beta v0.2)
+=========================================
+## for Apache 2.4 on Debian/Ubuntu based distrabutions
+Apache 2.4 WebShop Configuration. Optimized webserver setup.
  Includes such features as:
  - Maximised Concurent Server Connections
  - Development Mode Switching
    - including specialist scratch files (css/html)
    - ChromePHP  output as standard
  - Live Server Performance Advancements
- 
-Part of: WebShop TM Pro (Beta v0.1)
 
 Feature List
 

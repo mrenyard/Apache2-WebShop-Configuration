@@ -40,9 +40,9 @@ case ${PROCESS_TYPE} in
     "--deploy") ;&
     "--purge")
       echo "PURGING...";
-      sudo apt-get remove -y apache2-webshop-conf;
-      sudo apt-get purge -y apache2;
-      sudo apt-get autoremove -y;
+      sudo apt remove -y apache2-webshop-conf;
+      sudo apt purge -y apache2;
+      sudo apt autoremove -y;
       if [ -d /etc/apache2/ ]; then
         echo " Removing /etc/apache2";
         sudo rm -Rf /etc/apache2;
@@ -54,12 +54,12 @@ case ${PROCESS_TYPE} in
       echo "PURGE SUCCESFULLY COMPLETED!";
       ;;
   esac
-  case ${PROCESS_TYPE} in
+  case ${PROCESS_TYPE} 
     "--deploy")
       echo "DEPLOYING..."
       sudo dpkg -i ${SAVE_AS};
         echo "REINSTALL WITH DEPENDANCIES";
-        sudo apt-get -fy install
+        sudo apt --fix-broken install -y;
       echo "DEPLOY SUCCESFULLY COMPLETED!";
       ;;
   esac
