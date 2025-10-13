@@ -7,6 +7,7 @@ REMOTE_IPS="$RET";
 db_get apache2-web-conf/domain_name
 DOMAIN_NAME="$RET";
 if [ -z "$DOMAIN_NAME" ]; then DOMAIN_NAME="${HOSTNAME}.lan"; fi
+export DOMAIN_NAME;
 
 echo "UPDATING /etc/apache2/sites-available/default";
 if [ -f /etc/apache2/sites-available/000-default.conf ]; then
@@ -54,12 +55,13 @@ done;
 echo "APPLYING APACHE2 CONFIGURATION CHANGES";
 sudo a2enconf webshop.local;
 
-
 if [ -d /etc/apache2/ssl ]; then sudo rm -rf /etc/apache2/ssl; fi
 sudo mkdir /etc/apache2/ssl
 
 echo "RESTARTING MODIFIED SERVICES";
-sudo webstart;
+sudo systemctl restart apache2.service;
+sudo systemctl restart mysql.service;
+sudo systemctl restart postfix.service;
 
 #TODO:mrenyard: Find way to pre populate detail ? with debconf
 echo "to CREATE SELF-SIGNED SSL CERTIFICATE PLEASE DO THE FOLLOWING:";

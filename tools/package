@@ -40,26 +40,41 @@ case ${PROCESS_TYPE} in
     "--deploy") ;&
     "--purge")
       echo "PURGING...";
-      sudo apt remove -y apache2-webshop-conf;
-      sudo apt purge -y apache2;
+      sudo apt remove apache2-webshop-conf -y;
+      sudo apt purge mysql-server php php-mysql php-xdebug apache2 -y;
       sudo apt autoremove -y;
-      if [ -d /etc/apache2/ ]; then
-        echo " Removing /etc/apache2";
-        sudo rm -Rf /etc/apache2;
-      fi
       if [ -d /var/www/ ]; then
         echo " Removing /var/www";
         sudo rm -Rf /var/www;
       fi
+      sudo apt --fix-broken remove -y;
       echo "PURGE SUCCESFULLY COMPLETED!";
       ;;
   esac
-  case ${PROCESS_TYPE} 
+  case ${PROCESS_TYPE} in
     "--deploy")
-      echo "DEPLOYING..."
+      echo "DEPLOYING Apache2 WebShop Configuration (LAMP)...";
+      sudo apt update;
+      sudo apt install openssl postfix apache2 -y;
+      sudo ufw allow OpenSSH;
+      sudo ufw allow "Apache Full";
+      sudo ufw enable;
+      sudo apt install mysql-server -y;
+      sudo apt-get install php libapache2-mod-php php-mcrypt php-mysql php-xdebug -y;
+      echo "INSTALLING APACHE2 WEBSHOP CONFIGURATION PACKAGE";
       sudo dpkg -i ${SAVE_AS};
-        echo "REINSTALL WITH DEPENDANCIES";
-        sudo apt --fix-broken install -y;
+      echo "REINSTALL WITH DEPENDANCIES";
+      if [ -d /etc/apache2/ssl ]; then
+        sudo rm -rf /etc/apache2/ssl;
+      fi
+      sudo mkdir /etc/apache2/ssl;
+      echo "CREATING SELF-SIGNED SSL CERTIFICATE; USE ${HOSTNAME}.lan as FDQN";
+      sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl/apache.key -out /etc/apache2/ssl/apache.crt;
+      sudo chown root:ssl-cert /etc/apache2/ssl/*;
+      sudo chmod 710 /etc/apache2/ssl/*;
+      sudo systemctl start apache2.service;
+      sudo systemctl start mysql.service;
+      sudo systemctl start postfix.service;
       echo "DEPLOY SUCCESFULLY COMPLETED!";
       ;;
   esac
