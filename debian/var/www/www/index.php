@@ -44,7 +44,6 @@ if ($handle = opendir('../')) {
 
     if (
       (is_link('../' . $entry)) &&
-      (is_dir('../' . $entry)) &&
       (!(strpos ($entry, 'style') === 0)) &&
       (!(strpos ($entry, 'func') === 0)) &&
       (!(strpos ($entry, 'media') === 0)) &&
