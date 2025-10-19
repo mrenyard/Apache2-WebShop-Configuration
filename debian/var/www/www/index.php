@@ -47,9 +47,11 @@ if ($handle = opendir('../')) {
       (!(strpos ($entry, 'style') === 0)) &&
       (!(strpos ($entry, 'func') === 0)) &&
       (!(strpos ($entry, 'media') === 0)) &&
-      (!(strpos ($entry, 'dev') === 0))
+      (!(strpos ($entry, 'dev') === 0)) &&
+      (!(strpos ($entry, 'copy') === 0))
     ) {
-      $domain = $entry . '.' . getenv('HOSTNAME') . '.lan';
+      $code='sed -n "2 p" /etc/apache2/sites-available/' . $entry . '.conf | sed -e "s/  ServerName //g" -e "s/.' . $entry . '//g"';
+      $domain = shell_exec($code);
 ?>
       <article style="min-height:80px;"><a href="//<?=$domain; ?>" style="text-decoration:none;color:inherit;">
         <img src="//<?=$domain; ?>/apple-touch-icon-precomposed.png" style="float:left;margin-right:5px;" />
