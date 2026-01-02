@@ -1,5 +1,4 @@
-Apache2 WebShop Configuration (Beta v0.2)
-=========================================
+# Apache2 WebShop Configuration (Beta v0.2)
 ## for Apache 2.4 on Debian/Ubuntu based distrabutions
 Apache 2.4 WebShop Configuration. Optimized webserver setup.
  Includes such features as:
@@ -11,8 +10,7 @@ Apache 2.4 WebShop Configuration. Optimized webserver setup.
 
 Feature List
 
-Maximised Concurent Server Connections
---------------------------------------
+### Maximised Concurent Server Connections
 All browsers set a maximun concurent connections limit (at varying levels),
 following Section 8.1.4 of the HTTP/1.1 RFC
 (http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html#sec8.1.4)
@@ -26,34 +24,32 @@ following Section 8.1.4 of the HTTP/1.1 RFC
 This also alows us to optimize each sub-domain for its particular job and is used
 extensivaly in many of the subsaquantly mentiond features.
 
-Development Mode Switching
---------------------------
+### Development Mode Switching
 By using a *dev.* sub-domain we can switch between differant views of
 the same live website, automaticaly toggaling between debuging features and
 optimized performance. Working in this way also enables us to layer improvments
 onto the live site without interfering with its current state until each
 change is vetted.
 
-### SCRATCH LIST
+#### SCRATCH LIST
 The Scratch List file (*list.scratch*) is provided as the
 place to list all current Scratch Template and Scratch CSS files and is
 the default root view when in Development Mode. This gives one easy
 stating point from which developers can record, and clients view,
 evolving ideas for the sites development.
 
-### SCRATCH TEMPLATE FILES
+#### SCRATCH TEMPLATE FILES
 Scratch Template Files (files with a *.scratch* extension)
 provid an effective method for testing new markup alone side all the
 other website paraphenalia (i.e. its style and function), whilst being
 inacccesible through the live site.
 
-### NEEDS REBUILD WARNING NOTIFICATION
+#### NEEDS REBUILD WARNING NOTIFICATION
 If changes have been made that effect the live site without building
 
 ...
 
-Cascading Style Sheet Server (CSS-S)
-------------------------------------
+### Cascading Style Sheet Server (CSS-S)
 
  - Data URIs making CSS sprites
  - obsolete(http://www.nczonline.net/blog/2010/07/06/data-uris-make-css-sprites-obsolete/), using
@@ -62,19 +58,37 @@ CSSEmbed(https://github.com/nzakas/cssembed).
 Trimage(http://trimage.org/).
  - ...
 
-JavaScript Server (JS-S)
-------------------------
+### JavaScript Server (JS-S)
 
-Media Server
-------------
+### Media Server
 
  - Content Negosiation (favouring SGV)?...
  - Losslessly optimization of PNG and JPG files. Using Trimage(http://trimage.org/).
  - ...
 
-Live Server Performance?...
----------------------------
+### Live Server Performance?...
 
  - Automatically passes YSlow (minus CND)
  - Automatic versioning of css, javascript and media files
  
+## Initialisation and Install
+```console
+sudo apt install openssl postfix apache2 -y;```
+sudo ufw allow "Apache Full";
+sudo ufw enable;
+sudo apt install mysql-server -y;
+sudo apt install php libapache2-mod-php php-mysql php-xdebug -y;
+VERSION=`curl -sk --head https://github.com/mrenyard/Apache2-WebShop-Configuration/releases/latest/ | grep -o "location: https://github.com/mrenyard/Apache2-WebShop-Configuration/releases/tag/v.*" | cut -d"v" -f2- | tr -d "\r"`;
+wget https://github.com/mrenyard/Apache2-WebShop-Configuration/releases/download/v${VERSION}/apache2-webshop-conf_${VERSION}-0_all.deb
+sudo chmod 644 apache2-webshop-conf_${VERSION}-0_all.deb;
+sudo chown ${USER}:${USER} apache2-webshop-conf_${VERSION}-0_all.deb;
+sudo dpkg -i apache2-webshop-conf_${VERSION}-0_all.deb;
+if [ -d /etc/apache2/ssl ]; then sudo rm -rf /etc/apache2/ssl; fi;
+sudo mkdir /etc/apache2/ssl;
+echo "CREATING SELF-SIGNED SSL CERTIFICATE; USE ${LAN_HOSTNAME} as FDQN";
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl/apache.key -out /etc/apache2/ssl/apache.crt;
+sudo chown root:ssl-cert /etc/apache2/ssl/*;
+sudo chmod 710 /etc/apache2/ssl/*;
+sudo webstart;
+sudo rm apache2-webshop-conf_${VERSION}-0_all.deb;
+```
