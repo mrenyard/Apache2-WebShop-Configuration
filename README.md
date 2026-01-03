@@ -78,7 +78,7 @@ The LAMP (Apache2, MySql, PHP) install can sometime get a bit picky about the or
 Copy the below into a file on your Debian based Linux Server (init.sh):
 
 ```console
-#!/bin/bash -u
+#!/bin/bash -eu
 
 if [[ $EUID -ne 0 ]]; then echo "This script must be run as root" 1>&2; exit 1; fi
 if [ $USER == 'root' ]; then USER=$SUDO_USER; HOME="/home/${SUDO_USER}"; fi
