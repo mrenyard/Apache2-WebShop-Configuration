@@ -75,6 +75,8 @@ Trimage(http://trimage.org/).
 
 The LAMP (Apache2, MySql, PHP) install can sometime get a bit picky about the order that packages are installed. Therefore it is recomended to use the below short BASH script to install this package.
 
+> RECOMMENDATION: Looking to also install 'Web Project Management Tools' then use this [script](https://github.com/mrenyard/Web-Project-Managment-Tools?tab=readme-ov-file#initialisation-and-installation-script) instead.
+
 Copy the below into a file on your Debian based Linux Server (init.sh):
 
 ```console
@@ -87,6 +89,8 @@ while [[ "${HOME}" == "/root" || ! -d "${HOME}" ]]; do
   read -p "Enter username: " USERNAME
   HOME=`echo "/home/${USERNAME}"`;
 done
+
+sudo apt install curl
 
 echo -e "\nINSTALLing Apache2 WebShop Configuration (LAMP)...";
 sudo apt install openssl postfix apache2 -y;
@@ -108,12 +112,13 @@ sudo chmod 710 /etc/apache2/ssl/*;
 sudo webstart;
 sudo rm apache2-webshop-conf_${VERSION}-0_all.deb;
 echo "  Apache2 WebShop Configuration (LAMP) INSTALLED...";
+exit 0;
 ```
-change permisions to make sure it is exacutable:
+Change permisions to make sure it is executable:
 ```console 
 sudo chmod 775 init.sh
 ```
-and run:
+and RUN:
 ```console
 sudo ./init.sh
 ```
