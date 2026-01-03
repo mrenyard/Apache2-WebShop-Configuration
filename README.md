@@ -71,9 +71,25 @@ Trimage(http://trimage.org/).
  - Automatically passes YSlow (minus CND)
  - Automatic versioning of css, javascript and media files
  
-## Initialisation and Install
+## Initialisation and Installation Script
+
+The LAMP (Apache2, MySql, PHP) install can sometime get a bit picky about the order that packages are installed. Therefore it is recomended to use the below short BASH script to install this package.
+
+Copy the below into a file on your Debian based Linux Server (init.sh):
+
 ```console
-sudo apt install openssl postfix apache2 -y;```
+#!/bin/bash -u
+
+if [[ $EUID -ne 0 ]]; then echo "This script must be run as root" 1>&2; exit 1; fi
+if [ $USER == 'root' ]; then USER=$SUDO_USER; HOME="/home/${SUDO_USER}"; fi
+while [[ "${HOME}" == "/root" || ! -d "${HOME}" ]]; do
+  echo "USER HOME PATH ${HOME} IS INVALID!";
+  read -p "Enter username: " USERNAME
+  HOME=`echo "/home/${USERNAME}"`;
+done
+
+echo -e "\nINSTALLing Apache2 WebShop Configuration (LAMP)...";
+sudo apt install openssl postfix apache2 -y;
 sudo ufw allow "Apache Full";
 sudo ufw enable;
 sudo apt install mysql-server -y;
@@ -91,4 +107,13 @@ sudo chown root:ssl-cert /etc/apache2/ssl/*;
 sudo chmod 710 /etc/apache2/ssl/*;
 sudo webstart;
 sudo rm apache2-webshop-conf_${VERSION}-0_all.deb;
+echo "  Apache2 WebShop Configuration (LAMP) INSTALLED...";
+```
+change permisions to make sure it is exacutable:
+```console 
+sudo chmod 775 init.sh
+```
+and run:
+```console
+sudo ./init.sh
 ```
