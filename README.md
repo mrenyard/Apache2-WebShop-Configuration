@@ -1,4 +1,4 @@
-# Apache2 WebShop Configuration (Beta v0.2)
+# Apache2 WebShop Configuration
 ## for Apache 2.4 on Debian/Ubuntu based distrabutions
 Apache 2.4 WebShop Configuration. Optimized webserver setup.
  Includes such features as:
