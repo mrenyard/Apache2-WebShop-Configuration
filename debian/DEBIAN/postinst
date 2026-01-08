@@ -59,9 +59,7 @@ if [ -d /etc/apache2/ssl ]; then sudo rm -rf /etc/apache2/ssl; fi
 sudo mkdir /etc/apache2/ssl
 
 echo "RESTARTING MODIFIED SERVICES";
-sudo systemctl restart apache2.service;
-sudo systemctl restart mysql.service;
-sudo systemctl restart postfix.service;
+sudo systemctl restart apache2.service mysql.service postfix.service;
 
 #TODO:mrenyard: Find way to pre populate detail ? with debconf
 echo "to CREATE SELF-SIGNED SSL CERTIFICATE PLEASE DO THE FOLLOWING:";

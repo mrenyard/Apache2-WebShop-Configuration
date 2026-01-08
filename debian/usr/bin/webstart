@@ -1,6 +1,4 @@
 #!/bin/bash -eu
 
-sudo systemctl start apache2.service
-sudo systemctl start mysql.service
-sudo systemctl start postfix.service
+sudo systemctl start postfix.service mysql.service apache2.service;
 

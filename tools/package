@@ -15,8 +15,10 @@ case ${PROCESS_TYPE} in
       echo "This script must be run as root" 1>&2;
       exit 1;
     fi
-    read -p "Confirm package details in '../debian/DEBIAN/control':";
-    nano ../debian/DEBIAN/control;
+    if [ ${PROCESS_TYPE} == "--build" ]; then
+      read -p "Confirm package details in '../debian/DEBIAN/control':";
+      nano ../debian/DEBIAN/control;
+    fi
     VERSION=$(grep -m1 'Version:' ../debian/DEBIAN/control | awk '{print $2}');
     ARCHITECTURE=$(grep -m1 'Architecture:' ../debian/DEBIAN/control | awk '{print $2}');
     read -p "Save package as location/name_version-release_architecture.deb [../apache2-webshop-conf_${VERSION}-0_${ARCHITECTURE}.deb]: " SAVE_AS;
@@ -60,7 +62,6 @@ case ${PROCESS_TYPE} in
       echo "DEPLOYING Apache2 WebShop Configuration (LAMP)...";
       sudo apt update;
       sudo apt install openssl postfix apache2 -y;
-      sudo ufw allow OpenSSH;
       sudo ufw allow "Apache Full";
       sudo ufw enable;
       sudo apt install mysql-server -y;
@@ -76,9 +77,7 @@ case ${PROCESS_TYPE} in
       sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl/apache.key -out /etc/apache2/ssl/apache.crt;
       sudo chown root:ssl-cert /etc/apache2/ssl/*;
       sudo chmod 710 /etc/apache2/ssl/*;
-      sudo systemctl start apache2.service;
-      sudo systemctl start mysql.service;
-      sudo systemctl start postfix.service;
+      sudo systemctl start postfix.service mysql.service apache2.service ;
       echo "DEPLOY SUCCESFULLY COMPLETED!";
       ;;
   esac

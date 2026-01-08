@@ -75,10 +75,11 @@ Trimage(http://trimage.org/).
 
 The LAMP (Apache2, MySql, PHP) install can sometime get a bit picky about the order that packages are installed. Therefore it is recomended to use the below short BASH script to install this package.
 
-> RECOMMENDATION: Looking to also install 'Web Project Management Tools' then use this [script](https://github.com/mrenyard/Web-Project-Managment-Tools?tab=readme-ov-file#initialisation-and-installation-script) instead.
-
-Copy the below into a file on your Debian based Linux Server (init.sh):
-
+Check that your Debian based Linux Server (Ubuntu, Linux Mint, MX Linux, Zorin OS, Kali Linux) is up to date.
+```console
+sudo apt update && sudo apt upgrade
+```
+Copy the below into a file (`init.sh`):
 ```console
 #!/bin/bash -eu
 
@@ -89,8 +90,8 @@ while [[ "${HOME}" == "/root" || ! -d "${HOME}" ]]; do
   read -p "Enter username: " USERNAME
   HOME=`echo "/home/${USERNAME}"`;
 done
-
-sudo apt install curl
+export HOME;
+sudo apt install curl;
 
 echo -e "\nINSTALLing Apache2 WebShop Configuration (LAMP)...";
 sudo apt install openssl postfix apache2 -y;
@@ -105,20 +106,24 @@ sudo chown ${USER}:${USER} apache2-webshop-conf_${VERSION}-0_all.deb;
 sudo dpkg -i apache2-webshop-conf_${VERSION}-0_all.deb;
 if [ -d /etc/apache2/ssl ]; then sudo rm -rf /etc/apache2/ssl; fi;
 sudo mkdir /etc/apache2/ssl;
-echo "CREATING SELF-SIGNED SSL CERTIFICATE; USE ${LAN_HOSTNAME} as FDQN";
+echo "CREATING SELF-SIGNED SSL CERTIFICATE";
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl/apache.key -out /etc/apache2/ssl/apache.crt;
 sudo chown root:ssl-cert /etc/apache2/ssl/*;
 sudo chmod 710 /etc/apache2/ssl/*;
-sudo webstart;
+sudo systemctl start apache2.service mysql.service postfix.service;
 sudo rm apache2-webshop-conf_${VERSION}-0_all.deb;
 echo "  Apache2 WebShop Configuration (LAMP) INSTALLED...";
 exit 0;
 ```
 Change permisions to make sure it is executable:
 ```console 
-sudo chmod 775 init.sh
+sudo chmod +x init.sh
 ```
 and RUN:
 ```console
 sudo ./init.sh
+```
+and cleanup
+```console
+rm ./init.sh
 ```

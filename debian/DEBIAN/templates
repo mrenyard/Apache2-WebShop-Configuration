@@ -1,6 +1,6 @@
 Template: apache2-web-conf/domain_name
 Type: string
-default:  ${HOSTNAME}.lan
+default:  $${HOSTNAME}.lan
 Description: Primary domain name for this server:
  Please provide the domain name of this server. This will be used to configure the apache virtual hosts
  and SSL certificates. Be aware that this information can be provided, extended and or edited later. 
