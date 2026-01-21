@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Source debconf library.
 . /usr/share/debconf/confmodule
 db_get apache2-web-conf/remote_ips
 REMOTE_IPS="$RET";
@@ -9,6 +10,13 @@ DOMAIN_NAME="$RET";
 if [ -z "$DOMAIN_NAME" ]; then DOMAIN_NAME="${HOSTNAME}.lan"; fi
 export DOMAIN_NAME;
 
+echo "SETTING OWNERSHIP OF /var/www/docs/ TO ${USER}:www-data";
+sudo chown -R ${USER}:www-data /var/www/docs/
+sudo chmod -R 775 /var/www/docs/
+chmod +x /home/${USER}
+chmod +x /home/${USER}/Projects
+chmod +x /home/${USER}/Projects/*/www
+
 echo "UPDATING /etc/apache2/sites-available/default";
 if [ -f /etc/apache2/sites-available/000-default.conf ]; then
   sudo mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available_000-default.conf.dpkg-old;
@@ -16,7 +24,7 @@ fi
 sudo cp /tmp/apache2-webshop-conf/etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
 sudo sed -i -e 's/DOMAIN_NAME/'${DOMAIN_NAME}'/g' /etc/apache2/sites-available/000-default.conf
 
-#echo "CONFIGURING APACHE2 ENVVARS";
+echo "CONFIGURING APACHE2 ENVVARS";
 if [ -f /etc/apache2/envvars ]; then
   sudo cp /etc/apache2/envvars /etc/apache2/envvars.dpkg-old;
 fi
@@ -28,7 +36,6 @@ sudo ln -s /usr/share/php/ChromePhp.php /usr/share/php/ChromePhp.class.php;
 echo "ADDING APACHE MODULES";
 sudo a2dismod mpm_event mpm_worker;
 sudo a2enmod vhost_alias rewrite headers deflate setenvif filter expires include mpm_prefork ssl php*;
-
 
 echo "SETTING 'ServerTokens' to 'Prod' IN '/etc/apache2/conf-available/security'";
 sudo mv /etc/apache2/conf-available/security.conf /etc/apache2/conf-available_security.conf.dpkg-old;

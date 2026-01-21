@@ -4,7 +4,7 @@ Section: base
 Priority: optional
 Architecture: all
 Pre-Depends: debconf (>= 0.2.17)
-Depends: apache2, openssl, php, php-xdebug, libapache2-mod-php, php-mysql, mysql-server, postfix
+Depends: apache2, openssl, php, php-xdebug, libapache2-mod-php, php-xml, php-mbstring, php-gd, php-sqlite3, php-mysql, mysql-server, postfix
 Suggests: ramp, webproject-tools
 Maintainer: renyard.m@gmail.com
 Description: Apache2 WebShop Configuration. The optimized webserver setup recommended for RAMP project hosting.
